@@ -1,0 +1,51 @@
+<template>
+  <div style="display: flex">
+    <div class="">
+      <q-avatar>
+        <q-avatar
+          :color="coloriTem[Math.floor(Math.random() * 9)]"
+          text-color="white"
+          >{{ props.nombre.charAt(0).toUpperCase() }}</q-avatar
+        >
+      </q-avatar>
+    </div>
+    <div style="margin-left: 10px">
+      <div style="font-size: 0.8rem">{{ props.nombre }}</div>
+      <div style="font-size: 0.7rem">{{ props.email }}</div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ref } from "vue";
+export default {
+  props: ["props"],
+
+  setup() {
+    const name = ref("hello");
+    const coloriTem = ref([
+      "primary",
+      "blue",
+      "purple",
+      "brown",
+      "green",
+      "grey",
+      "pink",
+      "orange",
+      "red",
+    ]);
+    return {
+      name,
+      coloriTem,
+    };
+  },
+};
+</script>
+
+<style>
+.nombreUsu {
+  margin-left: -10px;
+  background: black;
+  color: white;
+}
+</style>
