@@ -51,7 +51,7 @@
               </q-avatar>
             </q-item-section>
             <q-item-section>
-              <q-item-label>Ariel Luque</q-item-label>
+              <q-item-label style="font-size:1.0rem; font-weight:bold;">Ariel Luque</q-item-label>
               <q-item-label caption>jhonar_theking@gmail.com</q-item-label>
             </q-item-section>
           </q-item>
@@ -156,10 +156,8 @@ export default {
         console.log(error);
       }
 
-
     };
 
-    
     return {
       iconoHeader,
       tituloHeader,
@@ -212,7 +210,7 @@ export default {
   &__drawer-footer-link
     color: inherit
     text-decoration: none
-    font-weight: 500
+    font-weight: 400
     font-size: .75rem
     &:hover
       color: #000

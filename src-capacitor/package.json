@@ -1,0 +1,12 @@
+{
+  "name": "smsilabus",
+  "version": "0.0.1",
+  "description": "A Quasar Framework app",
+  "author": "Ariel Luke <55467199+ariel-web@users.noreply.github.com>",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "2.4.8",
+    "@capacitor/cli": "^2.0.0",
+    "@capacitor/core": "^2.0.0"
+  }
+}

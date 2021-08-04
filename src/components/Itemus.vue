@@ -1,16 +1,15 @@
 <template>
   <div style="display: flex">
     <div class="">
-      <q-avatar>
-        <q-avatar
+      <q-avatar  style="width:38px; height:38px;">
+        <q-avatar style="margin-top:-5px;"
           :color="coloriTem[Math.floor(Math.random() * 9)]"
           text-color="white"
-          >{{ props.nombre.charAt(0).toUpperCase() }}</q-avatar
-        >
+          >{{ props.nombre.charAt(0).toUpperCase() }}</q-avatar>
       </q-avatar>
     </div>
     <div style="margin-left: 10px">
-      <div style="font-size: 0.8rem">{{ props.nombre }}</div>
+      <div style="font-size: 0.94rem">{{ props.nombre }}</div>
       <div style="font-size: 0.7rem">{{ props.email }}</div>
     </div>
   </div>

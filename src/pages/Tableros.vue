@@ -24,7 +24,7 @@
             <div class="" v-for="item in tableros" :key="item.uid">
               <div v-if="item.columna === m && item.fila == n">
                 <TableroInput
-                  :title="item.titulo"
+                  :title="item"
                   :colum="n"
                   :fila="m"
                   :iden="ide"
@@ -35,7 +35,7 @@
           </td>
           <td>
             <div v-if="enviado === false">
-              <TableroInput :title="hola" :colum="n" :fila="m" :iden="ide" />
+              <TableroInput :title="null" :colum="n" :fila="m" :iden="ide" />
             </div>
           </td>
         </div>

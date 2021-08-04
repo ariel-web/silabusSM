@@ -8,7 +8,7 @@
             params: { row: item.uid },
           }"
         >
-          <ItemHorario :item="item.nombre" />
+          <ItemHorario :item="item.nombre"/>
         </RouterLink>
       </div>
     </div>

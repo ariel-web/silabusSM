@@ -1,15 +1,13 @@
 <template>
   <div class="q-px-xl">
-    <h6>Agregar Curso</h6>
-    <pre>{{ isAuthenticated }}</pre>
+    <h6>Agregar Silabus</h6>
+    <pre style="display:none;">{{ isAuthenticated }}</pre>
     <div class="" v-for="c in cursos" :key="c.uid"></div>
     <q-form class="q-glutter-md" @submit.prevent="ProcesarForularioSilabus">
-
-      <q-badge color="secondary" multi-line> Model: "{{ cur }}" </q-badge>
       <q-select
         filled
         v-model="cur"
-        emit-value
+
         option-value="uid"
         option-label="curso"
         map-options
@@ -24,19 +22,18 @@
           <q-item v-bind="scope.itemProps">
             <q-item-section>
               <q-item-label v-html="scope.opt.curso" />
-              <q-item-label caption
-                >{{ scope.opt.grado }} {{ scope.opt.seccion }}</q-item-label
+              <q-item-label caption>
+              {{ scope.opt.grado }} {{ scope.opt.seccion }}
+              </q-item-label
               >
             </q-item-section>
           </q-item>
         </template>
       </q-select>
 
-      <q-badge color="secondary" multi-line> Model: "{{ doc }}" </q-badge>
       <q-select
         filled
         v-model="doc"
-        emit-value
         option-value="uid"
         option-label="nombres"
         map-options
@@ -49,34 +46,35 @@
       >
         <template v-slot:option="scope">
           <q-item v-bind="scope.itemProps">
-           <q-item-section avatar>
-            <q-avatar style="width:30px; height:30px">
-              <img :src="scope.opt.foto">
-            </q-avatar>
-          </q-item-section>
+            <q-item-section avatar>
+              <q-avatar style="width: 30px; height: 30px">
+                <img :src="scope.opt.foto" />
+              </q-avatar>
+            </q-item-section>
 
-          <q-item-section>
-            {{scope.opt.nombres}}
-          </q-item-section>
+            <q-item-section>
+              {{ scope.opt.nombres }}
+            </q-item-section>
           </q-item>
         </template>
       </q-select>
 
-      <SubirPDF  @getValues="setValues" />
+      <div class="q-gutter-sm">
+          <q-radio left-label v-model="origen" val="Link" label="Link de google" selected />
+          <q-radio left-label v-model="origen" val="Archivo" label="Subir archivo "/>
+      </div>
 
-      <q-input label="Nombre" v-model="nombre" />
-    
+      <div v-if="origen === 'Archivo'" >
+        <SubirPDF @getValues="setValues" />
+      </div>
+      <div v-if="origen === 'Link'">
+        <q-input label="link de drive" v-model="linkPDF"/>
+      </div>
+
       <q-btn label="Registrar" type="submit" color="primary" class="q-mt-xl" />
     </q-form>
-    <div v-if="path !== ''"><pre>{{ linkPDF = path }}</pre></div>
-    <div>
-      <pre>{{ cursos }}</pre>
-    </div>
-    <div>
-      <pre>{{ docentes }}</pre>
-    </div>
-    <div>
-      <p v-if="isAuthenticated"></p>
+    <div v-if="path !== ''">
+      <pre>{{ (linkPDF = path) }}</pre>
     </div>
   </div>
 </template>
@@ -88,19 +86,19 @@ import firebase from "firebase";
 import { useAuth } from "@vueuse/firebase/useAuth";
 import { storage } from "boot/firebase";
 const storageRef = storage.ref();
-import SubirPDF from '../../components/SubirPDF.vue'
-
+import SubirPDF from "../../components/SubirPDF.vue";
 
 export default {
-  components: {SubirPDF},
+  components: { SubirPDF },
   setup() {
     const nombre = ref("");
     const anio = ref(new Date().getFullYear());
-    const cur = ref("");
-    const doc = ref("");
+    const cur = ref(null);
+    const doc = ref(null);
     const cursos = ref([]);
     const docentes = ref([]);
-    const linkPDF = ref("")
+    const linkPDF = ref("");
+    const origen = ref("Link");
 
     db.collection("cursos")
       .get()
@@ -131,23 +129,19 @@ export default {
     const { isAuthenticated, user } = useAuth(firebase.auth);
 
     const ProcesarForularioSilabus = async () => {
-      if (
-        !nombre.value.trim() ||
-        !doc.value.trim() ||
-        !cur.value.trim() 
-      ) {
-        console.log("CAMPOS VACIOS");
-        return;
-      }
       try {
         await db
           .collection("silabus")
           .add({
-            nombre: nombre.value,
-            docenteID: doc.value,
-            cursonID: cur.value,
+            nombre: cur.value.curso+" "+cur.value.grado+" "+cur.value.seccion,
+            docenteID: doc.value.uid,
+            docenteNombre: doc.value.nombres,
+            docenteGrado: cur.value.grado,
+            docenteSeccion: cur.value.seccion,
+            cursonID: cur.value.uid,
+            cursoNombre: cur.value.curso,
             anio: anio.value,
-            url: linkPDF.value          
+            url: linkPDF.value,
           })
           .then((docRef) => {
             db.collection("silabus").doc(docRef.id).update({
@@ -159,7 +153,7 @@ export default {
             console.error("Error adding document: ", error);
           });
 
-        nombre.value = "";
+        linkPDF.value = "";
       } catch (error) {
         console.log(error);
       }
@@ -175,6 +169,7 @@ export default {
       cur,
       doc,
       linkPDF,
+      origen,
 
       filterFn(val, update, abort) {
         update(() => {
@@ -200,6 +195,6 @@ export default {
       this.path = obj.linkPDF;
       console.log(this.path);
     },
-  }
+  },
 };
 </script>

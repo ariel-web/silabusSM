@@ -1,12 +1,13 @@
 <template>
   <q-table
-    class="q-mt-md tablacursos"
+    class="q-mt-md tablaSilabus"
     :filter="filter"
-    no-data-label="No hay cursos"
+    no-data-label="No hay usuarios"
     :columns="columns"
-    :rows="cursos"
+    :rows="cursos" 
     hide-pagination
     row-key="uid"
+    hide-header
     hide-bottom
     v-model:pagination="pagination"
   >
@@ -39,52 +40,20 @@
       </q-input>
     </template>
 
-    <template v-slot:header="props">
-      <q-tr :props="props">
-        <q-th v-for="col in props.cols" :key="col.name" :props="props">
-            {{ col.label }}
-          
-        </q-th>
-      </q-tr>
-    </template>
-
     <template v-slot:body="props">
-    
-      <q-tr :props="props" @click="props.expand = !props.expand">
-        <q-td v-for="col in props.cols" :key="col.name" :props="props">
-          {{ col.value }}
-        </q-td>
-        <RouterLink 
-          :to="{ path: `/cursos/${props.row.uid}`,  params: { row: props.row.uid }  }"
-        >Show</RouterLink>
-  
-      </q-tr>
-      <q-tr v-show="props.expand" :props="props">
-        <q-td colspan="100%">
-          <div class="text-left" to="/home">
-            This is expand slot for row above: {{ props.row }}
-          </div>
-        </q-td>
-      </q-tr>
+      <div
+        flat
+        @click="props.expand = !props.expand"
+        style="width: 100%;"
+      >
+        <div class="card" :props="props" width="100%" >
+           <div>
+                <ItemSil :props="props.row" class="ContainerItemUsuario"/>
+            </div>
+        </div>
+      </div>
     </template>
   </q-table>
-
-  <div>
-    <div v-for="silabus in cursos " :key="silabus.uid" >
-      <span> {{ silabus.nombre }}</span>
-      <template>
-        <div class="container q-pa-lg">
-          <q-pdfviewer
-            v-model="show"
-            :src="silabus.url"
-            type="html5"
-            content-class="fit container"
-            inner-content-class="fit container"
-          />
-        </div>
-      </template>
-    </div>
-  </div>
 
   <q-page-sticky
     position="bottom-right"
@@ -93,31 +62,28 @@
   >
     <q-btn fab icon="add" color="accent" to="/silabus/agregar" />
   </q-page-sticky>
-
-  
 </template>
 
 <script>
 import { ref, computed } from "vue";
 import { db } from "boot/firebase";
-import Itemdoc from "../components/Itemdoc";
+import ItemSil from 'components/ItemSil.vue'
 
 const columns = [
   {
     name: "silabus",
-    label: "silabus",
+    label: "Curso",
     align: "left",
     field: "nombre",
     sortable: true,
   },
   {
-    name: "pdf",
-    label: "pdf",
+    name: "docente",
+    label: "docente",
     align: "left",
-    field: "url",
+    field: "docenteNombre",
     sortable: true,
   },
-
 ];
 
 const rows = [
@@ -128,10 +94,10 @@ const rows = [
 ];
 
 export default {
-  components: {},
-
+  components: {ItemSil},
   setup() {
     const show = ref(true);
+    const src = ref("pdf/pdf-test.pdf");
     const dialog = ref(false);
     const position = ref("top");
     const cursoseleccionado = ref("mails");
@@ -165,7 +131,6 @@ export default {
       position,
       columns,
       rows,
-      show,
       pagination,
       pagesNumber: computed(() =>
         Math.ceil(rows.length / pagination.value.rowsPerPage)
@@ -180,7 +145,7 @@ export default {
 </script>
 
 <style>
-.tablacursos {
+.tablaSilabus {
   border: none;
   background: white;
   box-shadow: none;
