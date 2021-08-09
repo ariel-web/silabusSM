@@ -7,7 +7,7 @@
       <div v-for="(dia, index) in dias" :key="index" style="border: none">
         <div
           style="
-            width: 190px;
+            width: 210px;
             height: 40px;
             background: #d2d2d2;
             margin-top: 10px;
@@ -28,7 +28,7 @@
     <template v-for="(n, index) in 6" :key="index" style="">
       <div style="display: flex">
         <div
-          v-for="(m, index) in 6"
+          v-for="(m, index) in 5"
           :key="index"
           style="width: 220px; border: none; padding-left: 10px"
         >
@@ -64,8 +64,8 @@ export default {
     const ide = ref("");
     const hola = ref("");
     const enviado = ref(false);
+    const update = ref(false);
     const dias = ref([
-      "HORA",
       "LUNES",
       "MARTES",
       "MIERCOLES",
@@ -73,7 +73,7 @@ export default {
       "VIERNES",
     ]);
     const tableros = ref([]);
-
+   
     db.collection("tableros")
       .get()
       .then((querySnapshot) => {
@@ -86,24 +86,7 @@ export default {
       .catch((error) => {
         console.log("Error getting documents: ", error);
     });
-
-    db.collection("tableros")
-    .onSnapshot((snapshot) => {
-        snapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
-                console.log(doc.id, " => ", doc.data());
-                tableros.value = [...tableros.value, doc.data()];
-            }
-            if (change.type === "modified") {
-                console.log("Modified city: ", change.doc.data());
-                tableros.value = [...tableros.value, doc.data()];
-            }
-            if (change.type === "removed") {
-                console.log("Removed city: ", change.doc.data());
-                tableros.value = [...tableros.value, doc.data()];
-            }
-        });
-    });
+    
 
     
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="" style="width: 190px; position: relative">
+  <div class="" style="width: 210px; position: relative">
     <div
       style="
         position: absolute;
@@ -10,6 +10,7 @@
       "
       v-if="titulo === '' ? (iconex = 'add') : (iconex = 'edit')"
     >
+    {{ IDEE }}
       <q-btn size="12px" round flat :icon="iconex" @click="prompt = true" />
     </div>
     <div v-if="title !== null">
@@ -25,6 +26,7 @@
       class="cardd"
       style="padding: 10px; margin-top: 10px; position: relative"
     >
+  
       <div style="backgroud: blue; height: 16px; text-align: left">
         <span style="font-size: 15px; font-weight: 500">{{
           titulo.toUpperCase()
@@ -142,6 +144,7 @@
 <script>
 import { ref } from "vue";
 import { db } from "boot/firebase";
+
 export default {
   props: {
     title: null,
@@ -149,7 +152,9 @@ export default {
     fila: Number,
     iden: String,
   },
+
   setup() {
+
     const titulo = ref("");
     const silabus = ref(null);
     const mostrar = ref(false);
@@ -166,6 +171,7 @@ export default {
     const docName = ref("");
     const docFoto = ref("");
     const ideTab = ref("");
+    const IDEE = ref("");
 
     const ProcesarFormularioTablero = async (col, fil, ident) => {
       try {
@@ -187,8 +193,6 @@ export default {
             console.error("Error adding document: ", error);
           });
 
-        nombre.value = "";
-        grado.value = "";
       } catch (error) {
         console.log(error);
       }
@@ -211,8 +215,9 @@ export default {
           })
           .then((docRef) => {
             db.collection("tableros").doc(docRef.id).update({
-              uid: docRef.id,
+              uid: docRef.id
             });
+            ideTab.value = docRef.id;
             console.log("Agregado!!");
           })
           .catch((error) => {
@@ -221,6 +226,13 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      titulo.value = sil.value.cursoNombre; 
+      grad.value =  sil.value.docenteGrado;
+      secc.value = sil.value.docenteSeccion;
+      urlSil.value = sil.value.url;
+      docName.value = sil.value.docenteNombre;
+      docFoto.value = sil.value.docenteFoto;
+      
     };
 
     const ProcesarFormularioTabEdit = async (col, fil, ident) => {
@@ -240,6 +252,13 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      titulo.value = sil.value.cursoNombre; 
+      grad.value =  sil.value.docenteGrado;
+      secc.value = sil.value.docenteSeccion;
+      urlSil.value = sil.value.url;
+      docName.value = sil.value.docenteNombre;
+      docFoto.value = sil.value.docenteFoto;
+      ideTab.value = ideTab.value;
     };
 
     const EliminarItemTab = async () => {
@@ -251,8 +270,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    };
+      titulo.value = ''; 
 
+    };
 
     return {
       mostrar,
@@ -273,8 +293,12 @@ export default {
       docName,
       docFoto,
       ideTab,
+      IDEE
     };
   },
+
+
+
 };
 </script>
 <style scoped>
