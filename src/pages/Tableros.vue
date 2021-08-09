@@ -1,15 +1,28 @@
 <template>
-  <div class="text-center flex-center" style="background: white">
+  <div class="text-center flex-center" style="background: #f1f1f1">
     <div class="" style="display: none">
       {{ (ide = $route.params.id.toString()) }}
     </div>
-    <div style="display: flex; text-align: center; background: white">
-      <div
-        v-for="(dia, index) in dias"
-        :key="index"
-        style="border: 1px solid green"
-      >
-        <div style="width: 188px">{{ dia }}</div>
+    <div style="display: flex; text-align: center; background: #f1f1f1">
+      <div v-for="(dia, index) in dias" :key="index" style="border: none">
+        <div
+          style="
+            width: 190px;
+            height: 40px;
+            background: #d2d2d2;
+            margin-top: 10px;
+            margin-left: 10px;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          <div style="margin-top: 10p">
+            {{ dia }}
+          </div>
+        </div>
       </div>
     </div>
     <template v-for="(n, index) in 6" :key="index" style="">
@@ -17,18 +30,13 @@
         <div
           v-for="(m, index) in 6"
           :key="index"
-          style="width: 190px; border: solid 1px green"
+          style="width: 220px; border: none; padding-left: 10px"
         >
           <td>
             <span style="display: none">{{ (enviado = false) }}</span>
             <div class="" v-for="item in tableros" :key="item.uid">
               <div v-if="item.columna === m && item.fila == n">
-                <TableroInput
-                  :title="item"
-                  :colum="n"
-                  :fila="m"
-                  :iden="ide"
-                />
+                <TableroInput :title="item" :colum="n" :fila="m" :iden="ide" />
                 <span style="display: none">{{ (enviado = true) }}</span>
               </div>
             </div>
@@ -77,7 +85,28 @@ export default {
       })
       .catch((error) => {
         console.log("Error getting documents: ", error);
-      });
+    });
+
+    db.collection("tableros")
+    .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+                console.log(doc.id, " => ", doc.data());
+                tableros.value = [...tableros.value, doc.data()];
+            }
+            if (change.type === "modified") {
+                console.log("Modified city: ", change.doc.data());
+                tableros.value = [...tableros.value, doc.data()];
+            }
+            if (change.type === "removed") {
+                console.log("Removed city: ", change.doc.data());
+                tableros.value = [...tableros.value, doc.data()];
+            }
+        });
+    });
+
+    
+
     return {
       lista1,
       dias,

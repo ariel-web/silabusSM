@@ -7,7 +7,6 @@
       <q-select
         filled
         v-model="cur"
-
         option-value="uid"
         option-label="curso"
         map-options
@@ -136,6 +135,7 @@ export default {
             nombre: cur.value.curso+" "+cur.value.grado+" "+cur.value.seccion,
             docenteID: doc.value.uid,
             docenteNombre: doc.value.nombres,
+            docenteFoto:doc.value.foto,
             docenteGrado: cur.value.grado,
             docenteSeccion: cur.value.seccion,
             cursonID: cur.value.uid,

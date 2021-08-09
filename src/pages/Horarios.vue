@@ -28,6 +28,23 @@ export default {
     const position = ref("top");
     const horarioseleccionado = ref("");
     const horarios = ref([]);
+    const silabos = ref([]);
+
+    db.collection("silabus")
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
+          silabos.value = [...silabos.value, doc.data()];
+          localStorage.setItem('silabos', JSON.stringify(silabos.value));
+        });
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+
+;
 
     db.collection("horarios")
       .get()
