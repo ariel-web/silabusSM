@@ -8,11 +8,18 @@
             params: { row: item.uid },
           }"
         >
-          <ItemHorario :item="item.nombre"/>
+          <ItemHorario :item="item"/>
         </RouterLink>
       </div>
     </div>
   </div>
+     <q-page-sticky
+    position="bottom-right"
+    :offset="[18, 18]"
+    @click="open('right')"
+  >
+    <q-btn fab icon="add" color="accent" to="/horario/agregar" />
+  </q-page-sticky>
 </template>
 
 <script>

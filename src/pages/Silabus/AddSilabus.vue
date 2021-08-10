@@ -31,7 +31,7 @@
       </q-select>
 
       <q-select
-        filled
+        filled 
         v-model="doc"
         option-value="uid"
         option-label="nombres"

@@ -56,7 +56,6 @@
 import { ref } from "vue";
 import TableroInput from "../components/TableroInput.vue";
 import { db } from "boot/firebase";
-
 export default {
   components: { TableroInput },
   setup() {
@@ -87,9 +86,7 @@ export default {
         console.log("Error getting documents: ", error);
     });
     
-
     
-
     return {
       lista1,
       dias,

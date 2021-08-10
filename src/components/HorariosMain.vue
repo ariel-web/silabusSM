@@ -1,42 +1,20 @@
 <template>
-  <q-page padding style="margin-bottom:60px;">
-    <Registro v-if="!isAuthenticated" />
-    <div v-else>
-      <DocMain />
-      <GradosMain />
-      <HorarioMain />
-      <CursosMain />
+<div class="q-pa-sm">
+  <span style="font-size: 18px; font-weight: 500; margin-left: 0px"
+    >Horarios</span
+  >
+  <div class="q-col-gutter-md row items-start" style="margin-top: 10px">
+    <div class="col-6" v-for="item in horarios" :key="item.uid">
+      <RouterLink
+        :to="{
+          path: `/tableros/${item.uid}`,
+          params: { row: item.uid },
+        }"
+      >
+        <ItemHorario :item="item" />
+      </RouterLink>
     </div>
-  </q-page>
-  <div style="width:100%; position:fixed; bottom:0; height:55px; ">
-    <q-tabs
-      v-model="tab"
-      indicator-color="transparent"
-      active-color="red"
-      class="bg-white text-grey-5 shadow-2"
-    >
-      <q-tab name="cursos"> 
-        <q-icon name="article"  style="font-size:30px; color:grey; margin-top:-15px;"/>
-        <span style="font-size:9px; color:black;">Cursos</span>
-      </q-tab>
-      <q-tab name="recientes"> 
-        <q-icon name="schedule"  style="font-size:30px; margin-top:-15px; color:grey;"/>
-        <span style="font-size:9px; color:black;">recientes</span>
-      </q-tab>
-            <q-tab name="home"> 
-        <q-icon name="touch_app" style="margin-top: -2px; font-size:40px; color:black; border: solid 1px; black; border-radius:50%; padding:5px; "/>
-        <span style="font-size:9px;">home</span>
-      </q-tab>
-      <q-tab name="docentes"> 
-        <q-icon name="supervisor_account"  style="margin-top:-15px;font-size:30px; color:grey;"/>
-        <span style="font-size:9px; color:black;">Docentes</span>
-      </q-tab>
-      <q-tab name="perfil"> 
-        <q-icon name="account_circle"  style="font-size:30px; margin-top:-15px; color:grey;"/>
-        <span style="font-size:9px; color:black;">perfil</span>
-      </q-tab>
-
-    </q-tabs>
+  </div>
 </div>
 </template>
 
@@ -47,21 +25,14 @@ import ItemHorario from "../components/ItemHorario.vue";
 import { ref } from "vue";
 import firebase from "firebase";
 import { useAuth } from "@vueuse/firebase/useAuth";
-import { useQuasar } from "quasar";
-import Registro from "../components/Registro.vue";
-import Usuarios from "../components/Usuarios.vue";
-import DocMain from "../components/DocMain.vue";
-import GradosMain from "../components/GradosMain.vue";
-import HorarioMain from "../components/HorariosMain.vue";
-import CursosMain from "../components/CursosMain.vue";
+
 export default {
   name: "PageIndex",
-  components: { Registro, DocMain, GradosMain, HorarioMain, CursosMain },
+  components: { ItemHorario },
 
   setup() {
     const { isAuthenticated, user } = useAuth(firebase.auth);
     const slide = ref(1);
-    const tab = "dashboard";
 
     //horario
     const dialog = ref(false);
@@ -113,7 +84,6 @@ export default {
       horarios,
       filter: ref(""),
       pagination,
-      tab,
     };
   },
 };

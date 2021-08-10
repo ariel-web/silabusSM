@@ -2,27 +2,36 @@
   <div class="q-px-xl">
     <h6>Crear Horario</h6>
     <pre>{{ isAuthenticated }}</pre>
+    <SubirImagenHorario @getValues="setValues" />
     <q-form class="q-glutter-md" @submit.prevent="ProcesarForularioHorario">
       <q-input label="Nombre" v-model="nombre" />
       <q-input type="number" label="Filas" style="max-width: 300px" v-model="filas"/>
       <q-input type="number" label="Columnas" style="max-width: 300px" v-model="columnas"/>
       <q-btn label="Registrar" type="submit" color="primary" class="q-mt-xl" />
     </q-form>
+
+    <div v-if="path !== ''">
+      <pre>{{ (linkFOTO = path) }}</pre>
+    </div>
+    
     <div>
       <p v-if="isAuthenticated" ></p>
-      <pre>{{user.uid}}</pre> 
     </div>
   </div>
+  
 </template>
 
 <script>
+
 import { ref } from "vue";
 import { auth, db } from "boot/firebase";
 import firebase from "firebase";
 import { useAuth } from "@vueuse/firebase/useAuth";
 import { storage } from "boot/firebase";
+import SubirImagenHorario from "../../components/SubirImagenHorario.vue";
 const storageRef = storage.ref();
 export default {
+  components: {SubirImagenHorario},
   setup() {
 
     const nombre = ref("");
@@ -30,6 +39,7 @@ export default {
     const columnas = ref(6);
     const anio = ref(new Date().getFullYear());
     const value = ref(false);
+    const linkFOTO = ref("")
 
     const { isAuthenticated, user } = useAuth(firebase.auth);
     
@@ -45,6 +55,7 @@ export default {
               columnas: columnas.value,
               anio: anio.value,
               usuario : user.value.uid,
+              imagen: linkFOTO.value,
           })
           .then((docRef) => {
             db.collection('horarios').doc(docRef.id).update({
@@ -56,13 +67,11 @@ export default {
               console.error("Error adding document: ", error);
           });
 
-        nombre.value = "";
-        941421354
-
         
       }catch (error) {
         console.log( error );
       }
+      nombre.value = "";
     };
 
     return {
@@ -72,7 +81,9 @@ export default {
       ProcesarForularioHorario,
       isAuthenticated,
       user,
+      linkFOTO,
     };
+    
   },
   data() {
     return {
@@ -82,7 +93,7 @@ export default {
   },
   methods: {
     setValues(obj) {
-      this.path = obj.pathDocente;
+      this.path = obj.linkFOTO;
       console.log(this.path);
     },
 
@@ -111,5 +122,6 @@ export default {
       });
     }
   },
+  
 };
 </script>

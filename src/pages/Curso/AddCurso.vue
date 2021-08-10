@@ -1,6 +1,7 @@
 <template>
   <div class="q-px-xl">
     <h6>Agregar Curso</h6>
+    <SubirFotoCurso @getValues="setValues" />
     <pre>{{ isAuthenticated }}</pre>
     <q-form class="q-glutter-md" @submit.prevent="ProcesarForularioCurso">
       <q-input label="Nombre" v-model="nombre" />
@@ -8,10 +9,16 @@
       <q-input label="Seccion" v-model="seccion" />
       <q-btn label="Registrar" type="submit" color="primary" class="q-mt-xl" />
     </q-form>
+
+    <div v-if="path !== ''">
+      <pre>{{ (linkFOTO = path) }}</pre>
+    </div>
     <div><h2>{{anio }}</h2></div>
     <div>
       <p v-if="isAuthenticated" ></p> 
     </div>
+
+
   </div>
 </template>
 
@@ -21,9 +28,11 @@ import { auth, db } from "boot/firebase";
 import firebase from "firebase";
 import { useAuth } from "@vueuse/firebase/useAuth";
 import { storage } from "boot/firebase";
+import SubirFotoCurso from "../../components/SubirFotoCurso.vue";
+
 const storageRef = storage.ref();
 export default {
-  components: { },
+  components: { SubirFotoCurso },
   setup() {
 
     const nombre = ref("");
@@ -31,6 +40,7 @@ export default {
     const seccion = ref("unica");
     const anio = ref(new Date().getFullYear());
     const value = ref(false);
+    const linkFOTO = ref("")
 
     const { isAuthenticated, user } = useAuth(firebase.auth);
     
@@ -45,6 +55,7 @@ export default {
               grado: grado.value,
               seccion: seccion.value,
               anio: anio.value,
+              url: linkFOTO.value,
           })
           .then((docRef) => {
             db.collection('cursos').doc(docRef.id).update({
@@ -71,7 +82,20 @@ export default {
       anio,
       ProcesarForularioCurso,
       isAuthenticated,
+      linkFOTO,
     };
+  },
+
+  data() {
+    return {
+      path: "",
+    };
+  },
+  methods: {
+    setValues(obj) {
+      this.path = obj.linkPDF;
+      console.log(this.path);
+    },
   },
 
 };

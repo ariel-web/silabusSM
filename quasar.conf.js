@@ -81,6 +81,7 @@ module.exports = configure(function (ctx) {
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
+    
       config: {},
 
       // iconSet: 'material-icons', // Quasar icon set
@@ -95,7 +96,7 @@ module.exports = configure(function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'AppFullscreen','QPullToRefresh'
+        'AppFullscreen'
       ]
     },
 

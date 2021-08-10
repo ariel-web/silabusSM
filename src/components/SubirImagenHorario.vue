@@ -22,7 +22,7 @@
     <div>
       <img class="preview" :src="picture" />
       <br />
-      <q-btn @click="onUpload">Subir Pdf</q-btn>
+      <q-btn @click="onUpload">Subir</q-btn>
     </div>
   </div>
 </template>
@@ -52,7 +52,7 @@ export default {
       this.picture = null;
       const storageRef = firebase
         .storage()
-        .ref("documentos/silabus/" + `${this.imageData.name}`)
+        .ref("imagenes/horario/" + `${this.imageData.name}`)
         .put(this.imageData);
       storageRef.on(
         `state_changed`,
@@ -68,7 +68,7 @@ export default {
           storageRef.snapshot.ref.getDownloadURL().then((url) => {
             this.picture = url;
              this.$emit("getValues", {
-              linkPDF: this.picture,
+              linkFOTO: this.picture,
             });
           });
         }

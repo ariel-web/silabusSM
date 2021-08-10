@@ -144,7 +144,6 @@
 <script>
 import { ref } from "vue";
 import { db } from "boot/firebase";
-
 export default {
   props: {
     title: null,
@@ -152,19 +151,15 @@ export default {
     fila: Number,
     iden: String,
   },
-
   setup() {
-
     const titulo = ref("");
     const silabus = ref(null);
     const mostrar = ref(false);
     const sil = ref(null);
     const Values = ref(JSON.parse(localStorage.getItem("silabos")));
-
     const prompt = ref(false);
     const address = ref("");
     const iconex = ref("add");
-
     const grad = ref("");
     const secc = ref("");
     const urlSil = ref("");
@@ -172,7 +167,6 @@ export default {
     const docFoto = ref("");
     const ideTab = ref("");
     const IDEE = ref("");
-
     const ProcesarFormularioTablero = async (col, fil, ident) => {
       try {
         await db
@@ -192,12 +186,10 @@ export default {
           .catch((error) => {
             console.error("Error adding document: ", error);
           });
-
       } catch (error) {
         console.log(error);
       }
     };
-
     const ProcesarFormularioTab = async (col, fil, ident) => {
       try {
         await db
@@ -234,7 +226,6 @@ export default {
       docFoto.value = sil.value.docenteFoto;
       
     };
-
     const ProcesarFormularioTabEdit = async (col, fil, ident) => {
       try {
         await db
@@ -260,20 +251,16 @@ export default {
       docFoto.value = sil.value.docenteFoto;
       ideTab.value = ideTab.value;
     };
-
     const EliminarItemTab = async () => {
       try {
         db.collection("tableros").doc(ideTab.value).delete().then(() => {
           console.log("Document successfully deleted!");
         })
-
       } catch (error) {
         console.log(error);
       }
       titulo.value = ''; 
-
     };
-
     return {
       mostrar,
       silabus,
@@ -296,9 +283,6 @@ export default {
       IDEE
     };
   },
-
-
-
 };
 </script>
 <style scoped>
