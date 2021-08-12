@@ -1,7 +1,8 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-grey-1" >
-    <q-header elevated class="bg-white text-grey-8 q-py-xs" height-hint="58" >
+  <q-layout view="hHh lpR fFf" class="bg-white" >
+    <q-header elevated class="bg-white text-grey-7 q-py-xs" height-hint="58" >
       <q-toolbar >
+        <div>
         <q-btn
           flat
           dense
@@ -10,7 +11,7 @@
           aria-label="Menu"
           icon="menu"
         />
-
+        </div>
         <q-btn flat no-caps no-wrap class="q-ml-xs">
           <q-icon :name="iconoHeader" color="brown" size="28px" />
           <q-toolbar-title shrink class="text-weight-bold" >
@@ -34,7 +35,6 @@
         </div>
       </q-toolbar>
     </q-header>
-
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
@@ -56,64 +56,48 @@
             </q-item-section>
           </q-item>
           <q-separator class="q-my-md" />
-          <q-item v-for="link in links1" :key="link.text" v-ripple clickable :to="link.to" exact @click="tituloHeader = link.text; iconoHeader = link.icon">
+          <q-item v-for="item in links1" :key="item.text" v-ripple clickable :to="item.to" exact @click="tituloHeader = item.text, link = item.text ; iconoHeader = item.icon" class="itemmenu" :active="link === item.text" active-class="my-menu-link" >
 
             <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
+              <q-icon :name="item.icon" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>{{ item.text }}</q-item-label>
             </q-item-section>
           </q-item>
 
           <q-separator class="q-my-md" />
 
 
-          <q-item v-for="link in links2" :key="link.text" v-ripple clickable :to="link.to" exact @click="tituloHeader = link.text; iconoHeader = link.icon">
+          <q-item v-for="item in links2" :key="item.text" v-ripple clickable :to="item.to" exact @click="tituloHeader = item.text, link = item.text ; iconoHeader = item.icon" class="itemmenu" :active="link === item.text" active-class="my-menu-link" >
             <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
+              <q-icon :name="item.icon" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>{{ item.text }}</q-item-label>
             </q-item-section>
           </q-item>
 
           <q-separator class="q-mt-md q-mb-xs" />
 
-          <q-item-label header class="text-weight-bold text-uppercase">
-            More from Youtube
-          </q-item-label>
-
-          <q-item v-for="link in links3" :key="link.text" v-ripple clickable>
+          <q-item v-for="item in links4" :key="item.text" class="itemmenu" :to="item.to" v-ripple clickable :active="link === item.text" @click="link = item.text" active-class="my-menu-link"  >
             <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
+              <q-icon :name="item.icon" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>{{ item.text }}</q-item-label>
             </q-item-section>
           </q-item>
 
-          <q-separator class="q-my-md" />
-
-          <q-item v-for="link in links4" :key="link.text" v-ripple clickable>
-            <q-item-section avatar>
-              <q-icon color="grey" :name="link.icon" />
+          <q-item v-ripple clickable @click="salir">
+          <q-item-section avatar v-if="isAuthenticated">
+              <q-icon name="logout" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ link.text }}</q-item-label>
+              <q-item-label>salir</q-item-label>
             </q-item-section>
           </q-item>
 
-          <q-separator class="q-mt-md q-mb-lg" />
-          
-          <q-item v-ripple clickable>
-             <q-btn round flat>
-            <q-icon name="logout" color="black" size="27px" v-if="isAuthenticated" flat @click="salir" />
-          </q-btn>
-            <q-item-section>
-              <q-item-label>Salir </q-item-label>
-            </q-item-section>
-          </q-item>
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -125,9 +109,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
-import { fabYoutube } from '@quasar/extras/fontawesome-v5'
-import { useQuasar } from 'quasar'
+import { ref } from 'vue'
 import firebase from "firebase";
 import { useAuth } from "@vueuse/firebase/useAuth";
 import { auth, db } from "boot/firebase";
@@ -136,10 +118,11 @@ export default {
   name: 'MyLayout',
   setup () {
     const iconoHeader = ('home')
-    const tituloHeader = ref('Silabus SM')
+    const tituloHeader = ref('Home')
     const leftDrawerOpen = ref(false)
     const search = ref('')
-    const $r = useQuasar()
+    const link = ref('Home')
+
     function toggleLeftDrawer () {
       leftDrawerOpen.value = !leftDrawerOpen.value
     }
@@ -167,6 +150,7 @@ export default {
       leftDrawerOpen,
       search,
       toggleLeftDrawer,
+      link,
       links1: [
         { icon: 'home', text: 'Home', to:'/' },
         { icon: 'whatshot', text: 'Silabus', to:"/silabus"  },
@@ -176,42 +160,24 @@ export default {
         { icon: 'folder', text: 'Docentes', to:"/docentes" },
         { icon: 'restore', text: 'Cursos', to:"/cursos"  },
         { icon: 'watch_later', text: 'Horarios', to:"/horarios" },
-        { icon: 'thumb_up_alt', text: 'Tablero', to:"/tableros" }
-      ],
-      links3: [
-        { icon: fabYoutube, text: 'YouTube Premium' },
-        { icon: 'local_movies', text: 'Movies & Shows' },
-        { icon: 'videogame_asset', text: 'Gaming' },
-        { icon: 'live_tv', text: 'Live' }
       ],
       links4: [
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'flag', text: 'Report history' },
-        { icon: 'help', text: 'Help' },
-        { icon: 'feedback', text: 'Send feedback' }
+        { icon: 'group', text: 'About', to:"/about" },
+        { icon: 'help', text: 'Ayuda', to:"/ayuda" },
       ],
     }
   }
 }
 </script>
 
-<style lang="sass">
-.YL
-  &__toolbar-input-container
-    min-width: 100px
-    width: 55%
-  &__toolbar-input-btn
-    border-radius: 0
-    border-style: solid
-    border-width: 1px 1px 1px 0
-    border-color: rgba(0,0,0,.24)
-    max-width: 60px
-    width: 100%
-  &__drawer-footer-link
-    color: inherit
-    text-decoration: none
-    font-weight: 400
-    font-size: .75rem
-    &:hover
-      color: #000
+<style scoped>
+.itemmenu{
+  color:#7c7c7c;
+}
+
+.my-menu-link{
+  color: brown;
+  background: #ffbb003e;
+  border-radius: 8px;
+}
 </style>

@@ -8,11 +8,11 @@
       </q-avatar>
     </div>
     <div style="margin-left: 10px; width:130px;" >
-      <div style="font-size: 0.9rem">{{ props.cursoNombre }}</div>
+      <div style="font-size: .9rem">{{ props.cursoNombre }}</div>
       <div style="font-size: 0.7rem">{{ props.docenteGrado }} {{props.docenteSeccion.charAt(0).toUpperCase() }}</div>
     </div>
     <div style="margin-left: 10px; width:130px;" >
-        <div style="font-size: 0.8rem">{{ props.docenteNombre }}</div>
+        <div style="font-size: .9rem">{{ props.docenteNombre }}</div>
     </div>
     <div >
         <a :href="props.url" style="text-decoration:none; width:50px; height:800px;" frameborder="0" allowfullscreen>ver</a>

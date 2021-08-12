@@ -6,8 +6,8 @@
       </q-avatar>
     </div>
     <div style="margin-left:10px">
-      <div style="font-size:0.8rem;">{{ props.nombres }} {{props.apellidos}}</div>
-      <div style="font-size:0.6rem;"> {{ props.celular }}</div>
+      <div style="font-size:0.9rem;">{{ props.nombres }} {{props.apellidos}}</div>
+      <div style="font-size:0.7rem;"> {{ props.celular }}</div>
     </div>
   </div>
 </template>

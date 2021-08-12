@@ -1,5 +1,24 @@
 <template>
-  <div class="q-px-xl">
+    <div class="headerperfil">
+      <div style="background: white; position: absolute; left: 0px">
+        <q-btn flat to="/cursos">
+          <q-icon
+            name="arrow_back"
+            class="text-black"
+            style="font-size: 2rem"
+          />
+        </q-btn>
+      </div>
+
+      <div style="background: white; position: absolute; right: 0px">
+        <q-btn flat>
+          <q-icon name="more_vert" class="text-black" style="font-size: 2rem" />
+        </q-btn>
+      </div>
+    </div>
+
+  <div class="q-px-xl">  
+  
     <h6>Agregar Curso</h6>
     <SubirFotoCurso @getValues="setValues" />
     <pre>{{ isAuthenticated }}</pre>
@@ -69,6 +88,7 @@ export default {
 
         nombre.value = "";
         grado.value = "";
+        
         
       }catch (error) {
         console.log( error );

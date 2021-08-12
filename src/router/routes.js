@@ -11,7 +11,10 @@ const routes = [
       { path: '/horarios', component: () => import('pages/Horarios.vue') },
       { path: '/tableros/:id', component: () => import('pages/Tableros.vue'), props: route => ({ query: route.query.q }) },
       { path: '/silabus', component: () => import('pages/Silabus.vue') },
+      { path: '/about', component: () => import('pages/About.vue') },
+      { path: '/ayuda', component: () => import('pages/Ayuda.vue') },
  
+      
     ]
   },
 
